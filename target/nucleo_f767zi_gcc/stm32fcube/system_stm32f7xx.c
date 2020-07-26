@@ -1,16 +1,14 @@
 /**
   ******************************************************************************
-  * @file    system_stm32f4xx.c
+  * @file    system_stm32f7xx.c
   * @author  MCD Application Team
-  * @version V1.2.1
-  * @date    09-October-2015
-  * @brief   CMSIS Cortex-M4 Device Peripheral Access Layer System Source File.
+  * @brief   CMSIS Cortex-M7 Device Peripheral Access Layer System Source File.
   *
   *   This file provides two functions and one global variable to be called from 
   *   user application:
   *      - SystemInit(): This function is called at startup just after reset and 
   *                      before branch to main program. This call is made inside
-  *                      the "startup_stm32f4xx.s" file.
+  *                      the "startup_stm32f7xx.s" file.
   *
   *      - SystemCoreClock variable: Contains the core clock (HCLK), it can be used
   *                                  by the user application to setup the SysTick 
@@ -24,29 +22,13 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
+  * <h2><center>&copy; Copyright (c) 2016 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  *   1. Redistributions of source code must retain the above copyright notice,
-  *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
-  *   3. Neither the name of STMicroelectronics nor the names of its contributors
-  *      may be used to endorse or promote products derived from this software
-  *      without specific prior written permission.
-  *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -55,18 +37,18 @@
   * @{
   */
 
-/** @addtogroup stm32f4xx_system
+/** @addtogroup stm32f7xx_system
   * @{
   */  
   
-/** @addtogroup STM32F4xx_System_Private_Includes
+/** @addtogroup STM32F7xx_System_Private_Includes
   * @{
   */
 
-#include "stm32f4xx.h"
+#include "stm32f7xx.h"
 
 #if !defined  (HSE_VALUE) 
-  #define HSE_VALUE    ((uint32_t)8000000) /*!< Default value of the External oscillator in Hz */
+  #define HSE_VALUE    ((uint32_t)25000000) /*!< Default value of the External oscillator in Hz */
 #endif /* HSE_VALUE */
 
 #if !defined  (HSI_VALUE)
@@ -77,7 +59,7 @@
   * @}
   */
 
-/** @addtogroup STM32F4xx_System_Private_TypesDefinitions
+/** @addtogroup STM32F7xx_System_Private_TypesDefinitions
   * @{
   */
 
@@ -85,7 +67,7 @@
   * @}
   */
 
-/** @addtogroup STM32F4xx_System_Private_Defines
+/** @addtogroup STM32F7xx_System_Private_Defines
   * @{
   */
 
@@ -102,7 +84,7 @@
   * @}
   */
 
-/** @addtogroup STM32F4xx_System_Private_Macros
+/** @addtogroup STM32F7xx_System_Private_Macros
   * @{
   */
 
@@ -110,9 +92,10 @@
   * @}
   */
 
-/** @addtogroup STM32F4xx_System_Private_Variables
+/** @addtogroup STM32F7xx_System_Private_Variables
   * @{
   */
+
   /* This variable is updated in three ways:
       1) by calling CMSIS function SystemCoreClockUpdate()
       2) by calling HAL API function HAL_RCC_GetHCLKFreq()
@@ -122,13 +105,14 @@
                variable is updated automatically.
   */
   uint32_t SystemCoreClock = 16000000;
-  __I uint8_t AHBPrescTable[16] = {0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 6, 7, 8, 9};
+  const uint8_t AHBPrescTable[16] = {0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 6, 7, 8, 9};
+  const uint8_t APBPrescTable[8] = {0, 0, 0, 0, 1, 2, 3, 4};
 
 /**
   * @}
   */
 
-/** @addtogroup STM32F4xx_System_Private_FunctionPrototypes
+/** @addtogroup STM32F7xx_System_Private_FunctionPrototypes
   * @{
   */
 
@@ -136,14 +120,14 @@
   * @}
   */
 
-/** @addtogroup STM32F4xx_System_Private_Functions
+/** @addtogroup STM32F7xx_System_Private_Functions
   * @{
   */
 
 /**
   * @brief  Setup the microcontroller system
-  *         Initialize the FPU setting, vector table location and External memory 
-  *         configuration.
+  *         Initialize the Embedded Flash Interface, the PLL and update the 
+  *         SystemFrequency variable.
   * @param  None
   * @retval None
   */
@@ -174,7 +158,7 @@ void SystemInit(void)
 
   /* Configure the Vector Table location add offset address ------------------*/
 #ifdef VECT_TAB_SRAM
-  SCB->VTOR = SRAM_BASE | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal SRAM */
+  SCB->VTOR = RAMDTCM_BASE | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal SRAM */
 #else
   SCB->VTOR = FLASH_BASE | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal FLASH */
 #endif
@@ -201,14 +185,14 @@ void SystemInit(void)
   *           - If SYSCLK source is PLL, SystemCoreClock will contain the HSE_VALUE(**) 
   *             or HSI_VALUE(*) multiplied/divided by the PLL factors.
   *         
-  *         (*) HSI_VALUE is a constant defined in stm32f4xx_hal_conf.h file (default value
+  *         (*) HSI_VALUE is a constant defined in stm32f7xx_hal_conf.h file (default value
   *             16 MHz) but the real value may vary depending on the variations
   *             in voltage and temperature.   
   *    
-  *         (**) HSE_VALUE is a constant defined in stm32f4xx_hal_conf.h file (its value
-  *              depends on the application requirements), user has to ensure that HSE_VALUE
-  *              is same as the real frequency of the crystal used. Otherwise, this function
-  *              may have wrong result.
+  *         (**) HSE_VALUE is a constant defined in stm32f7xx_hal_conf.h file (default value
+  *              25 MHz), user has to ensure that HSE_VALUE is same as the real
+  *              frequency of the crystal used. Otherwise, this function may
+  *              have wrong result.
   *                
   *         - The result of this function could be not correct when using fractional
   *           value for HSE crystal.
@@ -247,7 +231,7 @@ void SystemCoreClockUpdate(void)
       else
       {
         /* HSI used as PLL clock source */
-        pllvco = (HSI_VALUE / pllm) * ((RCC->PLLCFGR & RCC_PLLCFGR_PLLN) >> 6);
+        pllvco = (HSI_VALUE / pllm) * ((RCC->PLLCFGR & RCC_PLLCFGR_PLLN) >> 6);      
       }
 
       pllp = (((RCC->PLLCFGR & RCC_PLLCFGR_PLLP) >>16) + 1 ) *2;
