@@ -17,6 +17,10 @@
   ******************************************************************************
   */
 
+/* Includes ------------------------------------------------------------------*/
+#include "stm32f7xx_hal.h"
+#include "stm32f7xx_nucleo_144.h"
+
 /**
   * @brief  System Clock Configuration
   *         The system Clock is configured as follow : 
@@ -38,7 +42,7 @@
   * @param  None
   * @retval None
   */
-static void SystemClock_Config(void)
+void SystemClock_Config(void)
 {
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
   RCC_OscInitTypeDef RCC_OscInitStruct;
