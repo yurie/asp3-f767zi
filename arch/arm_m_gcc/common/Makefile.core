@@ -113,7 +113,18 @@ else ifeq ($(CORE_TYPE),CORTEX_M3)
 	ARM_ARCH = ARMV7M
 	COPTS := $(COPTS) -mcpu=cortex-m3
 	CDEFS := $(CDEFS) -DTOPPERS_CORTEX_M3
+else ifeq ($(CORE_TYPE),CORTEX_M7)
+  ARM_ARCH = ARMV7M
+	COPTS := $(COPTS) -mcpu=cortex-m7
+	CDEFS := $(CDEFS) -DTOPPERS_CORTEX_M7
+ifeq ($(FPU_ARCH_MACRO),__TARGET_FPU_FPV5_DP)
+	FPU_ARCH_OPT   = fpv5-d16
+else
+	FPU_ARCH_MACRO = __TARGET_FPU_FPV4_SP
+	FPU_ARCH_OPT   = fpv4-sp-d16
 endif
+endif
+# CORTEX_M7のFPU_ARCH_MACROはASPのターゲット依存部を参考にした
 
 #
 #  アーキテクチャ毎に異なる設定

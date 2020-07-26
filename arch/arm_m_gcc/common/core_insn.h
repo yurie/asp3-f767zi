@@ -166,7 +166,7 @@ delay_for_interrupt(void)
 /*
  *  SCS(NVIC等)を操作後に操作の影響を反映させてから次の命令を実行するための同期
  */
-#if defined(TOPPERS_CORTEX_M4) || defined(TOPPERS_CORTEX_M3) || defined(TOPPERS_CORTEX_M0) || defined(TOPPERS_CORTEX_M0PLUS)
+#if defined(TOPPERS_CORTEX_M4) || defined(TOPPERS_CORTEX_M3) || defined(TOPPERS_CORTEX_M0) || defined(TOPPERS_CORTEX_M0PLUS) || defined(TOPPERS_CORTEX_M7)
 #define SCS_SYNC Asm("isb")
 #else /* !defined(TOPPERS_CORTEX_M4) || defined(TOPPERS_CORTEX_M3) || defined(TOPPERS_CORTEX_M0) || defined(TOPPERS_CORTEX_M0PLUS) */
 #define SCS_SYNC Asm("dsb \n isb \n")
