@@ -40,7 +40,7 @@
  */
 
 /*
- * ターゲット依存モジュール（NUCLEO_F401RE用）
+ * ターゲット依存モジュール（NUCLEO_F767ZI用）
  */
 #include "kernel_impl.h"
 #include <sil.h>
@@ -139,7 +139,8 @@ usart_early_init()
 
 	UartHandle.Instance          = USART_NAME; 
 	UartHandle.Init.BaudRate     = BPS_SETTING;
-	UartHandle.Init.WordLength   = UART_WORDLENGTH_9B;
+//	UartHandle.Init.WordLength   = UART_WORDLENGTH_9B;
+	UartHandle.Init.WordLength   = UART_WORDLENGTH_8B;	 //TODO
 	UartHandle.Init.StopBits     = UART_STOPBITS_1;
 	UartHandle.Init.Parity       = UART_PARITY_ODD;
 	UartHandle.Init.HwFlowCtl    = UART_HWCONTROL_NONE;
