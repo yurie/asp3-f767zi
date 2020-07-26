@@ -1,5 +1,5 @@
 #
-#		Makefile のターゲット依存部（STM32F4XX_STM32CUBE用）
+#		Makefile のターゲット依存部（STM32F7XX_STM32CUBE用）
 #
 
 # 
@@ -10,7 +10,7 @@ CHIPDIR = $(SRCDIR)/arch/$(PRC)_$(TOOL)/$(CHIP)
 #
 #  コアタイプ
 #
-CORE_TYPE = CORTEX_M4
+CORE_TYPE = CORTEX_M7
 
 #
 #  コンパイルオプション
@@ -27,7 +27,7 @@ LIBS := $(LIBS)
 #  カーネルに関する定義
 #
 KERNEL_DIRS := $(KERNEL_DIRS) $(SRCDIR)/arch/$(PRC)_$(TOOL)/$(CHIP) \
-              $(SRCDIR)/arch/$(PRC)_$(TOOL)/$(CHIP)/STM32F4xx_HAL_Driver/Src
+              $(SRCDIR)/arch/$(PRC)_$(TOOL)/$(CHIP)/STM32F7xx_HAL_Driver/Src
 KERNEL_ASMOBJS := $(KERNEL_ASMOBJS)
 KERNEL_COBJS := $(KERNEL_COBJS)
 
