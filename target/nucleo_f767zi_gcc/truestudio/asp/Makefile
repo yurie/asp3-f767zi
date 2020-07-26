@@ -48,7 +48,7 @@ all:
 #
 #  ターゲット略称の定義
 #
-TARGET = nucleo_f401re_gcc
+TARGET = nucleo_f767zi_gcc
 
 #
 #  プログラミング言語の定義
