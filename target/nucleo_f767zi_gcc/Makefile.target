@@ -1,12 +1,12 @@
 #
-#		Makefile のターゲット依存部（NUCLEO_F401RE用）
+#		Makefile のターゲット依存部（NUCLEO_F767ZI用）
 #
 
 #
 #  ボード名, チップ名，コア名，開発環境名の定義
 #
-BOARD = nucleo_f401re
-CHIP  = stm32f4xx_stm32cube
+BOARD = nucleo_f767zi
+CHIP  = stm32f7xx_stm32cube
 PRC   = arm_m
 TOOL  = gcc
 
@@ -25,7 +25,7 @@ KERNEL_TIMER = TIM
 #  コンパイルオプション
 #
 INCLUDES := $(INCLUDES) -I$(TARGETDIR) -I$(TARGETDIR)/stm32fcube
-CDEFS := $(CDEFS) -DSTM32F401xE
+CDEFS := $(CDEFS) -DSTM32F767ZITx
 COPTS := $(COPTS) 
 LDFLAGS := -nostdlib -nostartfiles $(LDFLAGS)
 
@@ -41,11 +41,11 @@ OBJ_LDFLAGS := $(OBJ_LDFLAGS) -Wl,--gc-sections
 KERNEL_DIRS := $(KERNEL_DIRS) $(TARGETDIR) $(TARGETDIR)/stm32fcube
 KERNEL_ASMOBJS := $(KERNEL_ASMOBJS) start.o
 KERNEL_COBJS := $(KERNEL_COBJS) target_kernel_impl.o \
-                system_stm32f4xx.o stm32f4xx_nucleo.o systemclock_config.o \
-                stm32f4xx_hal_gpio.o stm32f4xx_hal_uart.o \
-                stm32f4xx_hal_rcc.o stm32f4xx_hal_dma.o
+                system_stm32f7xx.o stm32f7xx_nucleo.o systemclock_config.o \
+                stm32f7xx_hal_gpio.o stm32f7xx_hal_uart.o \
+                stm32f7xx_hal_rcc.o stm32f7xx_hal_dma.o
 
-KERNEL_COBJS := $(KERNEL_COBJS) stm32f4xx_hal_tim.o
+KERNEL_COBJS := $(KERNEL_COBJS) stm32f7xx_hal_tim.o
 
 #
 #  システムサービスに関する定義
@@ -90,7 +90,7 @@ check.timestamp: $(TARGETDIR)/target_check.trb
 #
 #  リンカスクリプトの定義
 #
-LDSCRIPT = $(TARGETDIR)/stm32f401re.ld
+LDSCRIPT = $(TARGETDIR)/stm32f767zi.ld
 
 #
 #  チップ依存部のインクルード
