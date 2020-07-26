@@ -43,7 +43,7 @@
  */
 
 #include <sil.h>
-#include "stm32f4xx_hal.h"
+#include "stm32f7xx_hal.h"
 #include "tUsart_tecsgen.h"
 
 /*
@@ -68,7 +68,10 @@
 Inline bool_t
 usart_getready(CELLCB *p_cellcb)
 {
-	return (sil_rew_mem((void*)USART_SR(ATTR_baseAddress)) & USART_SR_RXNE) != 0;
+// F401 : #define UART_FLAG_RXNE ((uint32_t)USART_SR_RXNE)
+// F767 : #define UART_FLAG_RXNE USART_ISR_RXNE
+//	return (sil_rew_mem((void*)USART_SR(ATTR_baseAddress)) & USART_SR_RXNE) != 0;
+	return (sil_rew_mem((void*)USART_SR(ATTR_baseAddress)) & UART_FLAG_RXNE) != 0;
 }
 
 /*
@@ -77,7 +80,10 @@ usart_getready(CELLCB *p_cellcb)
 Inline bool_t
 usart_putready(CELLCB *p_cellcb)
 {
-	return (sil_rew_mem((void*)USART_SR(ATTR_baseAddress)) & USART_SR_TXE) != 0;
+// F401 : #define UART_FLAG_TXE ((uint32_t)USART_SR_TXE)
+// F767 : #define UART_FLAG_TXE USART_ISR_TXE
+//	return (sil_rew_mem((void*)USART_SR(ATTR_baseAddress)) & USART_SR_TXE) != 0;
+	return (sil_rew_mem((void*)USART_SR(ATTR_baseAddress)) & UART_FLAG_TXE) != 0;
 }
 
 /*
