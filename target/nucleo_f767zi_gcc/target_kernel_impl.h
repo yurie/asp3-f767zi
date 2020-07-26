@@ -47,7 +47,7 @@
  * カーネルのターゲット依存部のインクルードファイル．kernel_impl.hのター
  * ゲット依存部の位置付けとなす．
  */
-#include "nucleo_f401re.h"
+#include "nucleo_f767zi.h"
 
 /*
  *  TBITW_IPRI の定義のため読み込み

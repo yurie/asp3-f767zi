@@ -1,11 +1,11 @@
-PACKAGE asp3_nucleo_f401re_gcc
+PACKAGE asp3_nucleo_f767zi_gcc
 
 E_PACKAGE
 gdb.ini
 Makefile.target
 MANIFEST
-nucleo_f401re.h
-stm32f401re.ld
+nucleo_f767zi.h
+stm32f767zi.ld
 target.cdl
 target.tf
 target_asm.inc
@@ -32,10 +32,10 @@ tPutLogTarget.cdl
 tSIOPortTarget.cdl
 tSIOPortTargetMain_inline.h
 
-stm32fcube/stm32f4xx_hal_conf.h
-stm32fcube/stm32f4xx_nucleo.c
-stm32fcube/stm32f4xx_nucleo.h
-stm32fcube/system_stm32f4xx.c
+stm32fcube/stm32f7xx_hal_conf.h
+stm32fcube/stm32f7xx_nucleo.c
+stm32fcube/stm32f7xx_nucleo.h
+stm32fcube/system_stm32f7xx.c
 stm32fcube/systemclock_config.c
 
 truestudio/asp/asp_debug.launch

@@ -1,4 +1,4 @@
-INCLUDE	"arm_m_gcc/stm32f4xx_stm32cube/chip"
+INCLUDE	"arm_m_gcc/stm32f7xx_stm32cube/chip"
 
 #target_config.c
 target_initialize

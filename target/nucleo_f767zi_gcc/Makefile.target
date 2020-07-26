@@ -27,7 +27,7 @@ KERNEL_TIMER = TIM
 #  コンパイルオプション
 #
 INCLUDES := $(INCLUDES) -I$(TARGETDIR) -I$(TARGETDIR)/stm32fcube
-CDEFS := $(CDEFS) -DSTM32F767ZITx
+CDEFS := $(CDEFS) -DSTM32F767ZITx -DSTM32F767xx
 COPTS := $(COPTS) 
 LDFLAGS := -nostdlib -nostartfiles $(LDFLAGS)
 
@@ -43,7 +43,7 @@ OBJ_LDFLAGS := $(OBJ_LDFLAGS) -Wl,--gc-sections
 KERNEL_DIRS := $(KERNEL_DIRS) $(TARGETDIR) $(TARGETDIR)/stm32fcube
 KERNEL_ASMOBJS := $(KERNEL_ASMOBJS) start.o
 KERNEL_COBJS := $(KERNEL_COBJS) target_kernel_impl.o \
-                system_stm32f7xx.o stm32f7xx_nucleo.o systemclock_config.o \
+                system_stm32f7xx.o stm32f7xx_nucleo_144.o systemclock_config.o \
                 stm32f7xx_hal_gpio.o stm32f7xx_hal_uart.o \
                 stm32f7xx_hal_rcc.o stm32f7xx_hal_dma.o
 

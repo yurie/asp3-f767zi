@@ -51,7 +51,7 @@
 /*
  *  ターゲットを識別するためのマクロの定義
  */
-#define TOPPERS_NUCLEO_F401RE			/* システム略称 */
+#define TOPPERS_NUCLEO_F767ZI			/* システム略称 */
 
 /*
  *  開発環境で共通な定義
