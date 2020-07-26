@@ -38,21 +38,21 @@
  */
 
 /*
- *		NUCLEO F401RE サポートモジュール
+ *		NUCLEO F767ZI サポートモジュール
  */
 
-#ifndef TOPPERS_NUCLEO_F401RE_H
-#define TOPPERS_NUCLEO_F401RE_H
+#ifndef TOPPERS_NUCLEO_F767ZI_H
+#define TOPPERS_NUCLEO_F767ZI_H
 
 /*
  *  コアのクロック周波数
  */
-#define CPU_CLOCK_HZ	84000000
+#define CPU_CLOCK_HZ	216000000
 
 /*
  *  割込み数
  */
-#define TMAX_INTNO (84 + 16)
+#define TMAX_INTNO (109 + 16)
 
 /*
  *  微少時間待ちのための定義（本来はSILのターゲット依存部）
@@ -66,7 +66,7 @@
  *  tecsgen実行時に必要な定義はこのファイルで行う
  */
 #ifndef TECSGEN
-#include "stm32f4xx_nucleo.h"
+#include "stm32f7xx_nucleo_144.h"
 #else /* !TECSGEN */
 #define USART2_BASE  0x40004400U
 #define USART2_IRQn  38
@@ -116,4 +116,4 @@ usart_low_init(void) {
 #endif /* TECSGEN */
 #endif /* TOPPERS_MACRO_ONLY */
 
-#endif /* TOPPERS_NUCLEO_F401RE_H */
+#endif /* TOPPERS_NUCLEO_F767ZI_H */
