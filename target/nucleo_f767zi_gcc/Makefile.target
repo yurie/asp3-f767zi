@@ -45,7 +45,7 @@ KERNEL_ASMOBJS := $(KERNEL_ASMOBJS) start.o
 KERNEL_COBJS := $(KERNEL_COBJS) target_kernel_impl.o \
                 system_stm32f7xx.o stm32f7xx_nucleo_144.o systemclock_config.o \
                 stm32f7xx_hal_gpio.o stm32f7xx_hal_uart.o \
-                stm32f7xx_hal_rcc.o stm32f7xx_hal_dma.o
+                stm32f7xx_hal_rcc.o stm32f7xx_hal_dma.o stm32f7xx_hal_pwr_ex.o stm32f7xx_hal.o
 
 KERNEL_COBJS := $(KERNEL_COBJS) stm32f7xx_hal_tim.o
 
