@@ -86,6 +86,18 @@ hardware_init_hook(void) {
 void
 target_initialize(void)
 {
+
+	/*
+	 * キャッシュの有効化
+	 * CPU_CACHE_Enable() : STM32CubeF7/Projects/STM32F767ZI-Nucleo/Templates/Src/main.cより引用
+	 */
+  /* Enable I-Cache */
+  SCB_EnableICache();
+
+  /* Enable D-Cache */
+  SCB_EnableDCache();
+
+
 	/*
 	 *  HALによる初期化
 	 *  HAL_Init() : stm32f7xx_hal.c の内容から必要な初期化のみ呼び出す．
