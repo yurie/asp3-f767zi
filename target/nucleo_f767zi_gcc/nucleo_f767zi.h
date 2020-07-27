@@ -68,17 +68,19 @@
 #ifndef TECSGEN
 #include "stm32f7xx_nucleo_144.h"
 #else /* !TECSGEN */
-#define USART2_BASE  0x40004400U
-#define USART2_IRQn  38
+//#define USART2_BASE  0x40004400U
+//#define USART2_IRQn  38
+#define USART3_BASE  0x40004800U
+#define USART3_IRQn  39
 #endif /* TECSGEN */
 #endif /* TOPPERS_MACRO_ONLY */
 
 /*
  *  USART関連の定義
  */
-#define USART_INTNO (USART2_IRQn + 16)
-#define USART_NAME  USART2
-#define USART_BASE  USART2_BASE 
+#define USART_INTNO (USART3_IRQn + 16)
+#define USART_NAME  USART3
+#define USART_BASE  USART3_BASE 
 
 /*
  *  ボーレート
@@ -96,22 +98,30 @@ usart_low_init(void) {
 
 	/* Enable Clock */
 	__HAL_RCC_GPIOA_CLK_ENABLE();
-	__HAL_RCC_USART2_CLK_ENABLE();
+  __HAL_RCC_GPIOC_CLK_ENABLE();
+  __HAL_RCC_GPIOH_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOD_CLK_ENABLE();
+  __HAL_RCC_GPIOG_CLK_ENABLE();
+	__HAL_RCC_USART3_CLK_ENABLE();
   
 	/* UART TX GPIO pin configuration  */
-	GPIO_InitStruct.Pin       = GPIO_PIN_2;
+//	GPIO_InitStruct.Pin       = GPIO_PIN_2; //PD09
+	GPIO_InitStruct.Pin       = GPIO_PIN_8; //PD09
 	GPIO_InitStruct.Mode      = GPIO_MODE_AF_PP;
 	GPIO_InitStruct.Pull      = GPIO_PULLUP;
-	GPIO_InitStruct.Speed     = GPIO_SPEED_FAST;
-	GPIO_InitStruct.Alternate = GPIO_AF7_USART2;
+//	GPIO_InitStruct.Speed     = GPIO_SPEED_FAST;
+	GPIO_InitStruct.Speed     = GPIO_SPEED_FREQ_VERY_HIGH;
+	GPIO_InitStruct.Alternate = GPIO_AF7_USART3; // USART3も値は同じ
 
-	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+	HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
     
 	/* UART RX GPIO pin configuration  */
-	GPIO_InitStruct.Pin = GPIO_PIN_3;
-	GPIO_InitStruct.Alternate = GPIO_AF7_USART2;
+//	GPIO_InitStruct.Pin = GPIO_PIN_3; //PD08
+	GPIO_InitStruct.Pin = GPIO_PIN_9; //PD08
+	GPIO_InitStruct.Alternate = GPIO_AF7_USART3;
     
-	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+	HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 }
 #endif /* TECSGEN */
 #endif /* TOPPERS_MACRO_ONLY */

@@ -154,14 +154,23 @@ usart_early_init()
 
 	UartHandle.Instance          = USART_NAME; 
 	UartHandle.Init.BaudRate     = BPS_SETTING;
-	UartHandle.Init.WordLength   = UART_WORDLENGTH_9B;
+//	UartHandle.Init.WordLength   = UART_WORDLENGTH_9B;
 //	UartHandle.Init.WordLength   = UART_WORDLENGTH_8B;	 //TODO
-	UartHandle.Init.StopBits     = UART_STOPBITS_1;
-	UartHandle.Init.Parity       = UART_PARITY_ODD;
-	UartHandle.Init.HwFlowCtl    = UART_HWCONTROL_NONE;
-	UartHandle.Init.Mode         = UART_MODE_TX_RX;
-	UartHandle.Init.OverSampling = UART_OVERSAMPLING_16;
-    
+//	UartHandle.Init.StopBits     = UART_STOPBITS_1;
+//	UartHandle.Init.Parity       = UART_PARITY_ODD;
+//	UartHandle.Init.HwFlowCtl    = UART_HWCONTROL_NONE;
+//	UartHandle.Init.Mode         = UART_MODE_TX_RX;
+//	UartHandle.Init.OverSampling = UART_OVERSAMPLING_16;
+
+  UartHandle.Init.WordLength = UART_WORDLENGTH_8B;
+  UartHandle.Init.StopBits = UART_STOPBITS_1;
+  UartHandle.Init.Parity = UART_PARITY_NONE;
+  UartHandle.Init.Mode = UART_MODE_TX_RX;
+  UartHandle.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  UartHandle.Init.OverSampling = UART_OVERSAMPLING_16;
+  UartHandle.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
+  UartHandle.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;  
+	  
 	if(HAL_UART_Init(&UartHandle) != HAL_OK) {
 		Error_Handler();
 	}
