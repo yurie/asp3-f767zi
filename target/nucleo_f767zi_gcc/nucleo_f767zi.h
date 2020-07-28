@@ -76,9 +76,9 @@
 /*
  *  USART関連の定義
  */
-#define USART_INTNO (USART2_IRQn + 16)
-#define USART_NAME  USART2
-#define USART_BASE  USART2_BASE 
+#define USART_INTNO (USART3_IRQn + 16)
+#define USART_NAME  USART3
+#define USART_BASE  USART3_BASE 
 
 /*
  *  ボーレート
@@ -95,23 +95,22 @@ usart_low_init(void) {
 	GPIO_InitTypeDef  GPIO_InitStruct;
 
 	/* Enable Clock */
-	__HAL_RCC_GPIOA_CLK_ENABLE();
-	__HAL_RCC_USART2_CLK_ENABLE();
-  
+	__HAL_RCC_USART3_CLK_ENABLE();
+	__HAL_RCC_GPIOD_CLK_ENABLE();
 	/* UART TX GPIO pin configuration  */
-	GPIO_InitStruct.Pin       = GPIO_PIN_2;
+	GPIO_InitStruct.Pin       = GPIO_PIN_8|GPIO_PIN_9;
 	GPIO_InitStruct.Mode      = GPIO_MODE_AF_PP;
-	GPIO_InitStruct.Pull      = GPIO_PULLUP;
-	GPIO_InitStruct.Speed     = GPIO_SPEED_FAST;
-	GPIO_InitStruct.Alternate = GPIO_AF7_USART2;
-
-	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+//	GPIO_InitStruct.Pull      = GPIO_PULLUP;
+	GPIO_InitStruct.Pull      = GPIO_NOPULL;
+//	GPIO_InitStruct.Speed     = GPIO_SPEED_FAST;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+	GPIO_InitStruct.Alternate = GPIO_AF7_USART3;
     
 	/* UART RX GPIO pin configuration  */
-	GPIO_InitStruct.Pin = GPIO_PIN_3;
-	GPIO_InitStruct.Alternate = GPIO_AF7_USART2;
+//	GPIO_InitStruct.Pin = GPIO_PIN_9;
+//	GPIO_InitStruct.Alternate = GPIO_AF7_USART3;
     
-	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+	HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 }
 #endif /* TECSGEN */
 #endif /* TOPPERS_MACRO_ONLY */
