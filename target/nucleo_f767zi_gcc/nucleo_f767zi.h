@@ -68,8 +68,8 @@
 #ifndef TECSGEN
 #include "stm32f7xx_nucleo_144.h"
 #else /* !TECSGEN */
-#define USART2_BASE  0x40004400U
-#define USART2_IRQn  38
+#define USART3_BASE  0x40004800U
+#define USART3_IRQn  39
 #endif /* TECSGEN */
 #endif /* TOPPERS_MACRO_ONLY */
 
