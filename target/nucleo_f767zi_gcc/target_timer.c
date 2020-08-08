@@ -68,7 +68,7 @@ target_hrt_initialize(intptr_t exinf)
 
 	Tim2Handle.Instance = TIM2;
 	Tim2Handle.Init.Period = 0xFFFFFFFF;
-	Tim2Handle.Init.Prescaler = (CPU_CLOCK_HZ/1000000);
+	Tim2Handle.Init.Prescaler = ((CPU_CLOCK_HZ/2)/1000000);
 	Tim2Handle.Init.ClockDivision = 0;
 	Tim2Handle.Init.CounterMode = TIM_COUNTERMODE_UP;
 
@@ -90,7 +90,7 @@ target_hrt_initialize(intptr_t exinf)
 
 	Tim5Handle.Instance = TIM5;
 	Tim5Handle.Init.Period = 0xFF;
-	Tim5Handle.Init.Prescaler = (CPU_CLOCK_HZ/1000000);
+	Tim5Handle.Init.Prescaler = ((CPU_CLOCK_HZ/2)/1000000);
 	Tim5Handle.Init.ClockDivision = 0;
 	Tim5Handle.Init.CounterMode = TIM_COUNTERMODE_UP;
 

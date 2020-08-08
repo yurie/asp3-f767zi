@@ -49,13 +49,15 @@
 /*
  * USARTレジスタ定義
  */
-#define USART_SR(x)		(x)
-#define USART_DR(x)		(x + 0x04)
-#define USART_BRR(x)	(x + 0x08)
-#define USART_CR1(x)	(x + 0x0C)
-#define USART_CR2(x)	(x + 0x10)
-#define USART_CR3(x)	(x + 0x14)
-#define USART_GTPR(x)	(x + 0x18)
+#define USART_CR1(x)	(x + 0x00)
+#define USART_CR2(x)	(x + 0x04)
+#define USART_CR3(x)	(x + 0x08)
+#define USART_BRR(x)	(x + 0x0C)
+#define USART_GTPR(x)	(x + 0x10)
+#define USART_ISR(x)	(x + 0x1C)
+#define USART_ICR(x)	(x + 0x20)
+#define USART_RDR(x)	(x + 0x24)
+#define USART_TDR(x)	(x + 0x28)
 
 
 /*
@@ -68,10 +70,8 @@
 Inline bool_t
 usart_getready(CELLCB *p_cellcb)
 {
-// F401 : #define UART_FLAG_RXNE ((uint32_t)USART_SR_RXNE)
-// F767 : #define UART_FLAG_RXNE USART_ISR_RXNE
-//	return (sil_rew_mem((void*)USART_SR(ATTR_baseAddress)) & USART_SR_RXNE) != 0;
-	return (sil_rew_mem((void*)USART_SR(ATTR_baseAddress)) & UART_FLAG_RXNE) != 0;
+	return (sil_rew_mem((void*)USART_ISR(ATTR_baseAddress)) & USART_FLAG_RXNE) != 0;
+	
 }
 
 /*
@@ -80,10 +80,7 @@ usart_getready(CELLCB *p_cellcb)
 Inline bool_t
 usart_putready(CELLCB *p_cellcb)
 {
-// F401 : #define UART_FLAG_TXE ((uint32_t)USART_SR_TXE)
-// F767 : #define UART_FLAG_TXE USART_ISR_TXE
-//	return (sil_rew_mem((void*)USART_SR(ATTR_baseAddress)) & USART_SR_TXE) != 0;
-	return (sil_rew_mem((void*)USART_SR(ATTR_baseAddress)) & UART_FLAG_TXE) != 0;
+	return (sil_rew_mem((void*)USART_ISR(ATTR_baseAddress)) & USART_FLAG_TXE) != 0;
 }
 
 /*
@@ -92,7 +89,7 @@ usart_putready(CELLCB *p_cellcb)
 Inline char
 usart_getchar(CELLCB *p_cellcb)
 {
-	return((char) sil_rew_mem((void*)USART_DR(ATTR_baseAddress)) & 0xFF);
+	return((char) sil_rew_mem((void*)USART_RDR(ATTR_baseAddress)) & 0xFF);
 }
 
 /*
@@ -101,7 +98,7 @@ usart_getchar(CELLCB *p_cellcb)
 Inline void
 usart_putchar(CELLCB *p_cellcb, char c)
 {
-	sil_wrw_mem((void*)USART_DR(ATTR_baseAddress), c);
+	sil_wrw_mem((void*)USART_TDR(ATTR_baseAddress), c);
 }
 
 /*
@@ -110,6 +107,7 @@ usart_putchar(CELLCB *p_cellcb, char c)
 void
 eSIOPort_open(CELLIDX idx)
 {
+
 	uint32_t tmp, usartdiv, fraction;
 	uint32_t src_clock;
 	CELLCB	*p_cellcb = GET_CELLCB(idx);
