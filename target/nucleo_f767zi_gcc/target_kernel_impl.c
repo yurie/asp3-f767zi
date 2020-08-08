@@ -142,9 +142,9 @@ target_initialize(void)
 	 */
 	usart_early_init();
 
-	while(1){
-		ePutLog_putChar('a');
-	}
+//	while(1){
+//		ePutLog_putChar('a');
+//	}
 }
 
 /*
@@ -182,7 +182,7 @@ usart_early_init()
 		Error_Handler();
 	}
 	char msg[16];
-	sprintf(msg, "hello!!\r\n");
+	sprintf(msg, "hello!\r\n");
 	HAL_UART_Transmit(&UartHandle, msg, strlen(msg), 0xffff);
 
 };
