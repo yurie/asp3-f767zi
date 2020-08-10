@@ -116,6 +116,24 @@
 #include "kernel_cfg.h"
 #include "sample1.h"
 
+#include <mruby.h>
+#include <mruby/compile.h>
+#include "mruby/irep.h"
+#include "mruby/debug.h"
+#include "mruby/opcode.h"
+#include "mruby/value.h"
+#include "mruby/string.h"
+#include "mruby/array.h"
+#include "mruby/proc.h"
+#include "mruby_tlsf.h"
+
+mrb_state *mrb;
+struct mrb_tlsf_t *t;
+
+#define MEMORY_POOL_SIZE	(TOPPERS_ROUND_SZ(100*1024, sizeof(intptr_t)))
+							/* 10*1024の部分は，適切なサイズに変更する */
+intptr_t memory_pool[MEMORY_POOL_SIZE / sizeof(intptr_t)];
+
 /*
  *  サービスコールのエラーのログ出力
  */
@@ -323,6 +341,9 @@ main_task(intptr_t exinf)
 #endif /* TASK_LOOP */
 	HRTCNT	hrtcnt1, hrtcnt2;
 
+	//TLSFを使ったメモリプールの初期化
+	init_memory_pool(MEMORY_POOL_SIZE, memory_pool);
+
 	SVC_PERROR(syslog_msk_log(LOG_UPTO(LOG_INFO), LOG_UPTO(LOG_EMERG)));
 	syslog(LOG_NOTICE, "Sample program starts (exinf = %d).", (int_t) exinf);
 
@@ -383,6 +404,39 @@ main_task(intptr_t exinf)
 	task_loop = LOOP_REF * 400LU / (ulong_t)(stime2 - stime1) * 1000LU;
 
 #endif /* TASK_LOOP */
+
+  // mruby use_presym version
+  mrb = mrb_open_tlsf((void *)memory_pool, MEMORY_POOL_SIZE);
+  mrb_value v = mrb_true_value();
+  mrb_value v_size = mrb_tlsf_used_memory(mrb, v);
+  mrb_int size = mrb_fixnum(v_size);
+  syslog(LOG_INFO, "used:%d", size);
+
+	  #include "main_task_rb.h"
+  mrb_value ret = mrb_load_irep(mrb, code);
+	if(mrb->exc){
+		syslog(LOG_INFO, "--- load irep OK ---\r\n");
+		if(!mrb_undef_p(ret)){
+			mrb_value s = mrb_funcall(mrb, mrb_obj_value(mrb->exc), "inspect", 0);
+			if (mrb_string_p(s)) {
+			  char *p = RSTRING_PTR(s);
+			  syslog(LOG_INFO, "mruby err msg:%s", p);
+			} else {
+			  syslog(LOG_INFO, "error unknown\r\n");
+			}
+		}else{
+			syslog(LOG_INFO, "--- mrb_undef_p(ret) ---\r\n");
+		}
+	}else{
+    mrb_value v_size = mrb_tlsf_used_memory(mrb, v);
+    mrb_int size = mrb_fixnum(v_size);
+    syslog(LOG_INFO, "total used:%d", size);
+	  syslog(LOG_INFO, "--- (!mrb->exe) ---\r\n");
+	}
+
+  mrb_close_tlsf(mrb);
+
+/////////////////////////
 
 	/*
  	 *  タスクの起動
