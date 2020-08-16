@@ -127,7 +127,6 @@
 #include "mruby/proc.h"
 #include "mruby_tlsf.h"
 
-mrb_state *mrb;
 struct mrb_tlsf_t *t;
 
 #define MEMORY_POOL_SIZE	(TOPPERS_ROUND_SZ(100*1024, sizeof(intptr_t)))
@@ -178,6 +177,53 @@ ulong_t	task_loop;		/* タスク内でのループ回数 */
 /*
  *  並行実行されるタスク
  */
+void
+task1(intptr_t exinf)
+{
+	syslog(LOG_INFO, "C: task1 start\n");
+	consume_time(task_loop);
+//	dly_tsk(1000000);
+	mrb_state *mrb_task1 = mrb_open_allocf(mrb_tlsf_allocf, (void *)t);
+//	dly_tsk(1000000);
+
+  mrb_value v = mrb_true_value();
+  mrb_value v_size = mrb_tlsf_used_memory(mrb_task1, v);
+  mrb_int size = mrb_fixnum(v_size);
+  syslog(LOG_INFO, "used:%d", size);
+	consume_time(task_loop);
+//	dly_tsk(1000000);
+
+	struct RClass * nucleo = mrb_class_get(mrb_task1, "Nucleo");
+	mrb_define_const(mrb_task1, nucleo, "DATA_QUE1_ID", mrb_fixnum_value(DTQ1));
+	mrb_define_const(mrb_task1, nucleo, "MAIN_TASK_ID", mrb_fixnum_value(MAIN_TASK));
+	mrb_define_const(mrb_task1, nucleo, "TASK1_ID", mrb_fixnum_value(TASK1));
+
+	#include "task1_rb.h"
+  mrb_value ret = mrb_load_irep(mrb_task1, code);
+	if(mrb_task1->exc){
+		syslog(LOG_INFO, "---tsk1 load irep OK ---\r\n");
+		if(!mrb_undef_p(ret)){
+			mrb_value s = mrb_funcall(mrb_task1, mrb_obj_value(mrb_task1->exc), "inspect", 0);
+			if (mrb_string_p(s)) {
+			  char *p = RSTRING_PTR(s);
+			  syslog(LOG_INFO, "tsk1 mruby err msg:%s", p);
+	consume_time(task_loop);
+			} else {
+			  syslog(LOG_INFO, "error unknown\r\n");
+			}
+		}else{
+			syslog(LOG_INFO, "--- mrb_undef_p(ret) ---\r\n");
+		}
+	}else{
+    mrb_value v_size = mrb_tlsf_used_memory(mrb_task1, v);
+    mrb_int size = mrb_fixnum(v_size);
+    syslog(LOG_INFO, "total used:%d", size);
+	  syslog(LOG_INFO, "--- (!mrb_task1->exe) ---\r\n");
+	}
+
+  mrb_close_tlsf(mrb_task1);
+}
+
 void
 task(intptr_t exinf)
 {
@@ -341,9 +387,6 @@ main_task(intptr_t exinf)
 #endif /* TASK_LOOP */
 	HRTCNT	hrtcnt1, hrtcnt2;
 
-	//TLSFを使ったメモリプールの初期化
-	init_memory_pool(MEMORY_POOL_SIZE, memory_pool);
-
 	SVC_PERROR(syslog_msk_log(LOG_UPTO(LOG_INFO), LOG_UPTO(LOG_EMERG)));
 	syslog(LOG_NOTICE, "Sample program starts (exinf = %d).", (int_t) exinf);
 
@@ -361,6 +404,11 @@ main_task(intptr_t exinf)
 	}
 	SVC_PERROR(serial_ctl_por(TASK_PORTID,
 							(IOCTL_CRLF | IOCTL_FCSND | IOCTL_FCRCV)));
+
+
+dly_tsk(1000000);
+	//TLSFを使ったメモリプールの初期化
+	init_memory_pool(MEMORY_POOL_SIZE, memory_pool);
 
 	/*
  	 *  ループ回数の設定
@@ -405,12 +453,26 @@ main_task(intptr_t exinf)
 
 #endif /* TASK_LOOP */
 
-  // mruby use_presym version
-  mrb = mrb_open_tlsf((void *)memory_pool, MEMORY_POOL_SIZE);
+//  mrb = mrb_open_tlsf((void *)memory_pool, MEMORY_POOL_SIZE);
+  t = mrb_tlsf_init((void *)memory_pool, MEMORY_POOL_SIZE);
+  mrb_state *mrb = mrb_open_allocf(mrb_tlsf_allocf, (void *)t);
   mrb_value v = mrb_true_value();
   mrb_value v_size = mrb_tlsf_used_memory(mrb, v);
   mrb_int size = mrb_fixnum(v_size);
   syslog(LOG_INFO, "used:%d", size);
+	dly_tsk(1000000);
+
+	struct RClass * nucleo = mrb_class_get(mrb, "Nucleo");
+	mrb_define_const(mrb, nucleo, "TASK1_ID", mrb_fixnum_value(TASK1));
+	mrb_define_const(mrb, nucleo, "MAIN_TASK_ID", mrb_fixnum_value(MAIN_TASK));
+	mrb_define_const(mrb, nucleo, "DATA_QUE1_ID", mrb_fixnum_value(DTQ1));
+	mrb_define_const(mrb, nucleo, "DATA_QUE2_ID", mrb_fixnum_value(DTQ2));
+	mrb_define_const(mrb, nucleo, "DATA_QUE3_ID", mrb_fixnum_value(DTQ3));
+//	mrb_define_const(mrb, nucleo, "CYCHDR1", mrb_fixnum_value(CYCHDR1));
+//	mrb_define_const(mrb, nucleo, "ALMHDR1", mrb_fixnum_value(ALMHDR1));
+//	mrb_define_const(mrb, nucleo, "HIGH_PRIORITY", mrb_fixnum_value(HIGH_PRIORITY));
+//	mrb_define_const(mrb, nucleo, "MID_PRIORITY", mrb_fixnum_value(MID_PRIORITY));
+//	mrb_define_const(mrb, nucleo, "LOW_PRIORITY", mrb_fixnum_value(LOW_PRIORITY));
 
 	  #include "main_task_rb.h"
   mrb_value ret = mrb_load_irep(mrb, code);
@@ -421,6 +483,7 @@ main_task(intptr_t exinf)
 			if (mrb_string_p(s)) {
 			  char *p = RSTRING_PTR(s);
 			  syslog(LOG_INFO, "mruby err msg:%s", p);
+	consume_time(task_loop);
 			} else {
 			  syslog(LOG_INFO, "error unknown\r\n");
 			}
@@ -433,11 +496,14 @@ main_task(intptr_t exinf)
     syslog(LOG_INFO, "total used:%d", size);
 	  syslog(LOG_INFO, "--- (!mrb->exe) ---\r\n");
 	}
+	dly_tsk(1000000);
+	syslog(LOG_INFO, "mrb_close\r\n");
 
   mrb_close_tlsf(mrb);
+	dly_tsk(1000000);
 
 /////////////////////////
-
+#if 0
 	/*
  	 *  タスクの起動
 	 */
@@ -583,6 +649,7 @@ main_task(intptr_t exinf)
 			break;
 		}
 	} while (c != '\003' && c != 'Q');
+#endif
 
 	syslog(LOG_NOTICE, "Sample program ends.");
 	SVC_PERROR(ext_ker());
