@@ -14,42 +14,40 @@ while true
 #  command = Nucleo::SharedMemory[1]
 #  Nucleo::SharedMemory[1] = 0
 
-=begin
   if command
     case command
     when 101 #e
-#      logger.write("tsk1:e ext_tsk\r\n")
+#      logger.syslog("tsk1:e ext_tsk\r\n")
       # ext_tsk
 #      Nucleo::Task.exit()
     when 115 #s
-#      logger.write("tsk1:s slp_tsk\r\n")
+#      logger.syslog("tsk1:s slp_tsk\r\n")
       # slp_tsk
 #      Nucleo::Task.sleep()
     when 83 #S
-#      logger.write("tsk1:S tslp_tsk(10000000)\r\n")
+#      logger.syslog("tsk1:S tslp_tsk(10000000)\r\n")
       # tslp_tsk(10000000)
 #      Nucleo::Task.sleep(10000)
     when 100 #d
-#      logger.write("tsk1:d dly_tsk(10000000)\r\n")
+#      logger.syslog("tsk1:d dly_tsk(10000000)\r\n")
       # dly_tsk(10000000)
 #      Nucleo::Task.delay(10000)
     when 121 #y
-#      logger.write("tsk1:y dis_ter\r\n")
+#      logger.syslog("tsk1:y dis_ter\r\n")
       # dis_ter
 #      Nucleo::Task.disable_terminate()
     when 89 #Y
-#      logger.write("tsk1:Y ena_ter\r\n")
+#      logger.syslog("tsk1:Y ena_ter\r\n")
       # ena_ter
 #      Nucleo::Task.enable_terminate()
     else
       #NucleoではCPUEXXC1未定義のためz,Zもなし
-#      logger.write("Unknown tsk1: #{command}\r\n")
+#      logger.syslog("Unknown tsk1: #{command}\r\n")
     end
   else
-    logger.write("tsk1: Nil\r\n")
+#    logger.syslog("tsk1: Nil\r\n")
     loop.consume_time_task_loop
   end
-=end
 #    Nucleo::Task.delay(100000)
 GC.start
 end
