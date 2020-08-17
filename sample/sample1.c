@@ -129,7 +129,7 @@
 
 struct mrb_tlsf_t *t;
 
-#define MEMORY_POOL_SIZE	(TOPPERS_ROUND_SZ(100*1024, sizeof(intptr_t)))
+#define MEMORY_POOL_SIZE	(TOPPERS_ROUND_SZ(200*1024, sizeof(intptr_t)))
 							/* 10*1024の部分は，適切なサイズに変更する */
 intptr_t memory_pool[MEMORY_POOL_SIZE / sizeof(intptr_t)];
 

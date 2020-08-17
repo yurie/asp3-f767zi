@@ -3,13 +3,13 @@ PORT_ID = 1
 @logger = Nucleo::Serial.new(PORT_ID)
 @clock = Nucleo::Clock.new()
 loop = Nucleo::Sample1.new()
-@logger.syslog("$$ main task initialize\r\n")
+@logger.syslog("$$ main task initialize: #{Nucleo::TASK1_ID}\r\n")
 task1_que = Nucleo::DataQue.new(Nucleo::DATA_QUE1_ID)
 
 # タスクの起動
 Nucleo::Task.active(Nucleo::TASK1_ID)
 #Nucleo::Task.active(1)
-@logger.syslog("$$ main task task1 active\r\n")
+@logger.syslog("-- main task task1 active\r\n")
 #TODO Nucleo::Task.active(Nucleo::TASK2_ID)
 #TODO log("$$ main task task2 active\r\n")
 #TODO Nucleo::Task.active(Nucleo::TASK3_ID)
@@ -31,14 +31,14 @@ while true
   when 101, 115, 83, 100, 121, 89, 122, 90 #e, s, S, d, y, Y, z, Z
     @logger.syslog("main:esSdyYzZ\r\n")
     case @task_no
-    when 1
+    when Nucleo::TASK1_ID
       task1_que.force_send(command)
 #      @logger.syslog("que1: #{command}\r\n")
-    when 2
-    when 3
+    when 20
+    when 30
     else
     end
-when 66 #B
+  when 66 #B
     @logger.syslog("main: B \r\n")
 #    @logger.syslog("main: B:stp_alm(ALMHDR1)")
 #    syslog(LOG_INFO, "#stp_alm(ALMHDR1)");
@@ -74,8 +74,8 @@ when 108 #l
 ##      Nucleo::Task.raise_termination(@task_no)
     end
   when 110 #m
-    @logger.syslog("main: n \r\n")
-#    @logger.syslog("main: n:rsm_tsk(#{@task_no})")
+    @logger.syslog("main: m \r\n")
+#    @logger.syslog("main: m:rsm_tsk(#{@task_no})")
 #    syslog(LOG_INFO, "#rsm_tsk(%d)", tskno);
 #    SVC_PERROR(rsm_tsk(tskid));
     if @task_no != 0
@@ -100,12 +100,12 @@ when 108 #l
 #    @logger.syslog("main: w:wup_tsk(#{@task_no}) \r\n")
 #    syslog(LOG_INFO, "#wup_tsk(%d)", tskno);
 #    SVC_PERROR(wup_tsk(tskid));
-    if @task_no != 0
-##      Nucleo::Task.wakeup(@task_no)
-    end
+#    if @task_no != 0
+      Nucleo::Task.wakeup(@task_no)
+#    end
   when 49 #1
     @logger.syslog("main: 1")
-    @task_no = 1
+    @task_no = Nucleo::TASK1_ID
   when 50 #2
     @logger.syslog("main: 2")
     @task_no = 2
@@ -113,14 +113,14 @@ when 108 #l
     @logger.syslog("main: 3")
     @task_no = 3
   when 97 #a
-    @logger.syslog("main: a \r\n")
+    @logger.syslog("main: a :#{@task_no}\r\n")
 #    @logger.syslog("main: a:act_tsk(#{@task_no})")
     # ack_tsk(@task_no)
 #    syslog(LOG_INFO, "#act_tsk(%d)", tskno);
 #    SVC_PERROR(act_tsk(tskid));
-    if @task_no != 0
-##      Nucleo::Task.active(@task_no)
-    end
+#    if @task_no != 0
+      Nucleo::Task.active(@task_no)
+#    end
   when 65 #A
     @logger.syslog("main: A \r\n")
 #    @logger.syslog("main: A:can_act(#{@task_no})")

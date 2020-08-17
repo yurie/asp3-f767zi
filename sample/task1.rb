@@ -1,6 +1,6 @@
 PORT_ID = 1
 logger = Nucleo::Serial.new(PORT_ID)
-logger.syslog("##-- task1 active\r\n")
+logger.syslog("###-- task1 active\r\n")
 loop = Nucleo::Sample1.new()
 que = Nucleo::DataQue.new(Nucleo::DATA_QUE1_ID)
 counter = 0
@@ -8,10 +8,10 @@ command = 0
 while true
   counter += 1
   command = que.receive_polling
-  logger.syslog("task1 is running #{counter} : #{command}.  |")
+  logger.syslog("## tsk1 is running #{counter} : #{command}.  |")
   loop.consume_time_task_loop
 
-#  if command
+  if command
     case command
     when 101 #e
       logger.syslog("tsk1:e ext_tsk\r\n")
@@ -39,12 +39,12 @@ while true
 #      Nucleo::Task.enable_terminate()
     else
       #NucleoではCPUEXXC1未定義のためz,Zもなし
-#      logger.syslog("Unknown tsk1: #{command}\r\n")
+      logger.syslog("Unknown tsk1: #{command}\r\n")
     end
-#  else
+  else
 #    logger.syslog("tsk1: Nil\r\n")
 #    loop.consume_time_task_loop
-#  end
+  end
 #    Nucleo::Task.delay(100000)
 GC.start
 end
