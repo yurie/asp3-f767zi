@@ -128,14 +128,20 @@ target_initialize(void)
 	/*
 	 *  UserLEDの初期化
 	 */
+	BSP_LED_Init(LED1);
 	BSP_LED_Init(LED2);
+	BSP_LED_Init(LED3);
 
-//		BSP_LED_On(LED2);
-//	volatile int loop;
-//	while(1){
-//		for(loop = 0; loop < 0x100000; loop++);
-//		BSP_LED_Toggle(LED2);
-//	}
+/* LED動作確認
+		BSP_LED_On(LED1);
+	volatile int loop;
+	while(1){
+		for(loop = 0; loop < 0x100000; loop++);
+		BSP_LED_Toggle(LED1);
+		BSP_LED_Toggle(LED2);
+		BSP_LED_Toggle(LED3);
+	}
+*/
 
 	/*
 	 *  バーナー出力用のシリアル初期化
