@@ -58,7 +58,7 @@ extern void SystemInit(void);
 extern void SystemClock_Config(void);
 
 /*
- *  バーナ出力用のUARTの初期化
+ *  バナー出力用のUARTの初期化
  */
 static void usart_early_init(void);
 
@@ -144,7 +144,7 @@ target_initialize(void)
 */
 
 	/*
-	 *  バーナー出力用のシリアル初期化
+	 *  バナー出力用のシリアル初期化
 	 */
 	usart_early_init();
 
