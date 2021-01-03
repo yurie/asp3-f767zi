@@ -187,9 +187,11 @@ usart_early_init()
 	if(HAL_UART_Init(&UartHandle) != HAL_OK) {
 		Error_Handler();
 	}
+#ifndef MROS2_USE_ASP3
 	char msg[16];
 	sprintf(msg, "hello!\r\n");
 	HAL_UART_Transmit(&UartHandle, msg, strlen(msg), 0xffff);
+#endif
 
 };
 
