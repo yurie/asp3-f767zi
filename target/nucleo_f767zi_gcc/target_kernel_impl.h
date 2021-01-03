@@ -42,7 +42,7 @@
 #define TOPPERS_TARGET_KERNEL_IMPL_H
 
 /*
- * ターゲット依存部モジュール（NUCLEO_F401RE用）
+ * ターゲット依存モジュール（NUCLEO_F767ZI用）
  *
  * カーネルのターゲット依存部のインクルードファイル．kernel_impl.hのター
  * ゲット依存部の位置付けとなす．
