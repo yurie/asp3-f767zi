@@ -15,7 +15,8 @@ SECTIONS
 	.text :
 	{
 		__text = .;
-		*(.vector)
+		KEEP(*(.vector))
+		. = ALIGN(16);
 		*(.text)
 		*(.text.*)
 	} > FLASH
@@ -58,7 +59,7 @@ SECTIONS
   .heap :
   {
     heap_start = .	;
-    *(.appheap*)
+    KEEP(*(.appheap*))
     *(COMMON)
     . = ALIGN(32 / 8);
     heap_end = .	;
