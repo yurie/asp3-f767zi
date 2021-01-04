@@ -50,7 +50,7 @@
 /*
  *  チップで共通な定義
  */
-#define CPUEXC1 3   /* Hard Fault */
+#define CPUEXC1 6   /* Usage Fault */
 #define RAISE_CPU_EXCEPTION {   \
     Asm("mov r0, #0x00");       \
     Asm("push {r0}");           \
