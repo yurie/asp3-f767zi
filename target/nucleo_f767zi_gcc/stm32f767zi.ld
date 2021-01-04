@@ -15,7 +15,8 @@ SECTIONS
 	.text :
 	{
 		__text = .;
-		*(.vector)
+		KEEP(*(.vector))
+		. = ALIGN(16);
 		*(.text)
 		*(.text.*)
 	} > FLASH
@@ -55,6 +56,14 @@ SECTIONS
 		*(COMMON)
 		. = ALIGN(4);
 	} > SRAM
+  .heap :
+  {
+    heap_start = .	;
+    KEEP(*(.appheap*))
+    *(COMMON)
+    . = ALIGN(32 / 8);
+    heap_end = .	;
+  } > SRAM
 	. = ALIGN(4);
 	_end = .;
 	__bss_end = .;
