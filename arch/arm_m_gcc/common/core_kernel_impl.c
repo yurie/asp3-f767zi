@@ -265,7 +265,7 @@ void
 config_int(INTNO intno, ATR intatr, PRI intpri)
 {
 	assert(VALID_INTNO_CFGINT(intno));
-	assert(TMIN_INTPRI <= intpri && intpri <= TMAX_INTPRI);
+	assert(-(1 << TBITW_IPRI) <= intpri && intpri <= TMAX_INTPRI);
 
 	/* 
 	 *  一旦割込みを禁止する
