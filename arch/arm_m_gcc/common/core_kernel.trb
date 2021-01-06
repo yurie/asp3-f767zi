@@ -145,7 +145,7 @@ Array(2..14).each { |excno|
 $INTNO_VALID.each { |inhno|
     if inh = $cfgData[:DEF_INH][inhno]
         if inh[:inhatr] == $TA_NONKERNEL
-            $kernelCfgC.add("    (FP)(#{v[:inthdr]}), /* #{inhno} */")
+            $kernelCfgC.add("    (FP)(#{inh[:inthdr]}), /* #{inhno} */")
             next
         end
     end
