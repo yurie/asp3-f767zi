@@ -187,8 +187,7 @@ core_initialize(void)
 	/*
 	 *  CPUロックフラグ実現のための変数の初期化
 	 */
-	lock_flag = true;
-	saved_iipm = IIPM_ENAALL;
+	lock_cpu_dsp();
 
 	/*
 	 *  ベクタテーブルを設定
