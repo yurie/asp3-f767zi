@@ -187,8 +187,7 @@ core_initialize(void)
 	/*
 	 *  CPUロックフラグ実現のための変数の初期化
 	 */
-	lock_flag = true;
-	saved_iipm = IIPM_ENAALL;
+	lock_cpu_dsp();
 
 	/*
 	 *  ベクタテーブルを設定
@@ -265,7 +264,7 @@ void
 config_int(INTNO intno, ATR intatr, PRI intpri)
 {
 	assert(VALID_INTNO_CFGINT(intno));
-	assert(TMIN_INTPRI <= intpri && intpri <= TMAX_INTPRI);
+	assert(-(1 << TBITW_IPRI) <= intpri && intpri <= TMAX_INTPRI);
 
 	/* 
 	 *  一旦割込みを禁止する

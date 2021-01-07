@@ -50,13 +50,7 @@
 /*
  *  チップで共通な定義
  */
-#define CPUEXC1 3   /* Hard Fault */
-#define RAISE_CPU_EXCEPTION {   \
-    Asm("mov r0, #0x00");       \
-    Asm("push {r0}");           \
-    Asm("pop  {pc}");           \
-}
-#define CANNOT_RETURN_CPUEXC
-
+#define CPUEXC1 6   /* Usage Fault */
+#define RAISE_CPU_EXCEPTION Asm("udf #0")
 
 #endif /* TOPPERS_CORE_TEST_H */
