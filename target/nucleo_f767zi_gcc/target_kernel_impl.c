@@ -218,7 +218,9 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
   return HAL_OK;
 }
 
+#ifndef MROS2_USE_ASP3
 uint32_t HAL_GetTick(void)
 {
   return current_hrtcnt/1000;
 }
+#endif
