@@ -97,7 +97,7 @@ LDSCRIPT = $(TARGETDIR)/stm32f767zi.ld
 #
 #  チップ依存部のインクルード
 #
-include $(SRCDIR)/arch/$(PRC)_$(TOOL)/$(CHIP)/Makefile.chip
+include $(DRIVERSDIR)/Makefile.chip
 
 #
 #  フラッシュへの書き込み
