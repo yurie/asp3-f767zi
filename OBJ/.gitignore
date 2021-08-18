@@ -1,0 +1,9 @@
+*.d
+*.o
+*.a
+*.timestamp
+asp.*
+cfg*_out.*
+kernel_cfg.*
+offset.*
+gen/
